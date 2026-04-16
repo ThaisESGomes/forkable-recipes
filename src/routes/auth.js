@@ -4,13 +4,13 @@ const bcrypt   = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');
 const prisma   = new PrismaClient();
 
-// GET /auth/login
+
 router.get('/login', (req, res) => {
   if (req.session.userId) return res.redirect('/');
   res.render('auth/login', { title: 'Login' });
 });
 
-// POST /auth/login
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -31,13 +31,13 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// GET /auth/register
+
 router.get('/register', (req, res) => {
   if (req.session.userId) return res.redirect('/');
   res.render('auth/register', { title: 'Criar Conta' });
 });
 
-// POST /auth/register
+
 router.post('/register', async (req, res) => {
   const { name, email, password, confirmPassword, bio } = req.body;
   if (password !== confirmPassword) {
@@ -70,7 +70,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// POST /auth/logout
+
 router.post('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/'));
 });

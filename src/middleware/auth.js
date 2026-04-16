@@ -11,7 +11,7 @@ function isAdmin(req, res, next) {
 }
 
 function isOwnerOrAdmin(req, res, next) {
-  // Usado nas rotas de receitas — passa para o controller verificar
+  
   next();
 }
 

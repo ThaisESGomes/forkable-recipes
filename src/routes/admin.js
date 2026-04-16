@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma   = new PrismaClient();
 const { isAuthenticated, isAdmin } = require('../middleware/auth');
 
-// GET /admin — dashboard
+
 router.get('/', isAuthenticated, isAdmin, async (req, res, next) => {
   try {
     const [users, recipes, totalForks, totalFavs] = await Promise.all([
@@ -37,7 +37,7 @@ router.get('/', isAuthenticated, isAdmin, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// DELETE /admin/users/:id
+
 router.delete('/users/:id', isAuthenticated, isAdmin, async (req, res, next) => {
   try {
     const uid = parseInt(req.params.id);
@@ -45,7 +45,7 @@ router.delete('/users/:id', isAuthenticated, isAdmin, async (req, res, next) => 
       req.flash('error', 'Você não pode excluir sua própria conta de admin.');
       return res.redirect('/admin');
     }
-    // Desvincula forks das receitas do usuário antes de deletar
+    
     const userRecipes = await prisma.recipe.findMany({
       where: { authorId: uid }
     });
@@ -61,7 +61,7 @@ router.delete('/users/:id', isAuthenticated, isAdmin, async (req, res, next) => 
   } catch (err) { next(err); }
 });
 
-// DELETE /admin/recipes/:id
+
 router.delete('/recipes/:id', isAuthenticated, isAdmin, async (req, res, next) => {
   try {
     const rid = parseInt(req.params.id);
@@ -75,7 +75,7 @@ router.delete('/recipes/:id', isAuthenticated, isAdmin, async (req, res, next) =
   } catch (err) { next(err); }
 });
 
-// PATCH /admin/users/:id/role — promover/rebaixar usuário
+
 router.patch('/users/:id/role', isAuthenticated, isAdmin, async (req, res, next) => {
   try {
     const uid  = parseInt(req.params.id);

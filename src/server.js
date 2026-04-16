@@ -13,19 +13,19 @@ const adminRoutes  = require('./routes/admin');
 
 const app = express();
 
-// View engine
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
 app.set('layout', 'layout');
 
-// Middleware
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Session
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
   resave: false,
@@ -33,10 +33,10 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
-// Flash messages
+
 app.use(flash());
 
-// Variáveis globais para todas as views
+
 app.use((req, res, next) => {
   res.locals.currentUser = req.session.userId ? {
     id:    req.session.userId,
@@ -49,18 +49,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rotas
+
 app.use('/',        indexRoutes);
 app.use('/auth',    authRoutes);
 app.use('/recipes', recipeRoutes);
 app.use('/admin',   adminRoutes);
 
-// 404
+
 app.use((req, res) => {
   res.status(404).render('404', { title: 'Página não encontrada' });
 });
 
-// Erro geral
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('error', { title: 'Erro interno', message: err.message });

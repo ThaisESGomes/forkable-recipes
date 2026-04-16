@@ -1,4 +1,4 @@
-<!-- LINHAGEM / LINEAGE -->
+
 <% if (lineage.length > 0 || recipe.forkedFromId) { %>
   <div class="lineage-banner">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -24,7 +24,7 @@
 <% } %>
 
 <div class="recipe-detail-layout">
-  <!-- COLUNA PRINCIPAL -->
+  
   <div class="recipe-main">
     <div class="recipe-detail-header">
       <div>
@@ -54,7 +54,7 @@
       </span>
     </div>
 
-    <!-- AÇÕES DO USUÁRIO -->
+    
     <% if (currentUser && currentUser.id !== recipe.authorId) { %>
       <div class="recipe-user-actions">
         <form action="/recipes/<%= recipe.id %>/favorite" method="POST" style="display:inline">
@@ -80,7 +80,7 @@
       </div>
     <% } %>
 
-    <!-- INGREDIENTES -->
+    
     <section class="recipe-section">
       <h2>🥗 Ingredientes</h2>
       <ul class="ingredients-list">
@@ -90,7 +90,7 @@
       </ul>
     </section>
 
-    <!-- MODO DE PREPARO -->
+    
     <section class="recipe-section">
       <h2>👨‍🍳 Modo de Preparo</h2>
       <ol class="instructions-list">
@@ -101,9 +101,9 @@
     </section>
   </div>
 
-  <!-- SIDEBAR -->
+  
   <aside class="recipe-sidebar">
-    <!-- FORKS -->
+    
     <div class="sidebar-card">
       <h3>🍴 Forks desta Receita (<%= recipe.forks.length %>)</h3>
       <% if (recipe.forks.length === 0) { %>
@@ -126,7 +126,7 @@
       <% } %>
     </div>
 
-    <!-- ORIGEM -->
+    
     <% if (recipe.forkedFrom) { %>
       <div class="sidebar-card sidebar-card--origin">
         <h3>📌 Forkado de</h3>

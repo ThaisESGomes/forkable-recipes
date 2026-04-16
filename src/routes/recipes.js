@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma   = new PrismaClient();
 const { isAuthenticated } = require('../middleware/auth');
 
-// Helper: busca linhagem completa de forks recursivamente
+
 async function getForkLineage(recipe) {
   const lineage = [];
   let current = recipe;
@@ -20,7 +20,7 @@ async function getForkLineage(recipe) {
   return lineage;
 }
 
-// GET /recipes — listar todas
+
 router.get('/', async (req, res, next) => {
   try {
     const { category, search } = req.query;
@@ -52,12 +52,12 @@ router.get('/', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// GET /recipes/new
+
 router.get('/new', isAuthenticated, (req, res) => {
   res.render('recipes/new', { title: 'Nova Receita', forkedFrom: null });
 });
 
-// POST /recipes — criar
+
 router.post('/', isAuthenticated, async (req, res, next) => {
   const { title, description, ingredients, instructions, servings, prepTime, category } = req.body;
   try {
@@ -75,7 +75,7 @@ router.post('/', isAuthenticated, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// GET /recipes/:id — ver receita
+
 router.get('/:id', async (req, res, next) => {
   try {
     const recipe = await prisma.recipe.findUnique({
@@ -101,7 +101,7 @@ router.get('/:id', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// GET /recipes/:id/edit
+
 router.get('/:id/edit', isAuthenticated, async (req, res, next) => {
   try {
     const recipe = await prisma.recipe.findUnique({
@@ -119,7 +119,7 @@ router.get('/:id/edit', isAuthenticated, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// PUT /recipes/:id — atualizar
+
 router.put('/:id', isAuthenticated, async (req, res, next) => {
   const { title, description, ingredients, instructions, servings, prepTime, category } = req.body;
   try {
@@ -148,7 +148,7 @@ router.put('/:id', isAuthenticated, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// DELETE /recipes/:id — deletar
+
 router.delete('/:id', isAuthenticated, async (req, res, next) => {
   try {
     const recipe = await prisma.recipe.findUnique({
@@ -162,7 +162,7 @@ router.delete('/:id', isAuthenticated, async (req, res, next) => {
       req.flash('error', 'Sem permissão.');
       return res.redirect(`/recipes/${recipe.id}`);
     }
-    // Desvincula forks antes de deletar
+    
     await prisma.recipe.updateMany({
       where: { forkedFromId: recipe.id },
       data: { forkedFromId: null }
@@ -173,7 +173,7 @@ router.delete('/:id', isAuthenticated, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// POST /recipes/:id/fork — LÓGICA DE FORK
+
 router.post('/:id/fork', isAuthenticated, async (req, res, next) => {
   try {
     const original = await prisma.recipe.findUnique({
@@ -189,7 +189,7 @@ router.post('/:id/fork', isAuthenticated, async (req, res, next) => {
       return res.redirect(`/recipes/${original.id}`);
     }
 
-    // Cria nova receita derivada
+    
     const fork = await prisma.recipe.create({
       data: {
         title:        `Fork de: ${original.title}`,
@@ -200,7 +200,7 @@ router.post('/:id/fork', isAuthenticated, async (req, res, next) => {
         prepTime:     original.prepTime,
         category:     original.category,
         authorId:     req.session.userId,
-        forkedFromId: original.id   // ← referência mantida
+        forkedFromId: original.id   
       }
     });
 
@@ -209,7 +209,7 @@ router.post('/:id/fork', isAuthenticated, async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// POST /recipes/:id/favorite — toggle favorito
+
 router.post('/:id/favorite', isAuthenticated, async (req, res, next) => {
   try {
     const recipeId = parseInt(req.params.id);

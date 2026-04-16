@@ -1,4 +1,4 @@
-// Auto-close flash messages after 4 seconds
+
 document.addEventListener('DOMContentLoaded', () => {
   const alerts = document.querySelectorAll('.alert');
   alerts.forEach(alert => {
@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   });
 
-  // Confirm on delete forms (extra safety)
+  
   document.querySelectorAll('form[data-confirm]').forEach(form => {
     form.addEventListener('submit', e => {
       if (!confirm(form.dataset.confirm)) e.preventDefault();
     });
   });
 
-  // Animate numbers in stats
+  
   document.querySelectorAll('.stat-number').forEach(el => {
     const target = parseInt(el.textContent, 10);
     if (isNaN(target) || target === 0) return;
