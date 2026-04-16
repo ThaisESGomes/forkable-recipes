@@ -1,0 +1,109 @@
+<section class="hero">
+  <div class="hero-text">
+    <h1 class="hero-title">Receitas que evoluem juntas</h1>
+    <p class="hero-subtitle">Publique, descubra e <strong>forke</strong> receitas como se fossem código-aberto. Cada versão conta uma história.</p>
+    <% if (!currentUser) { %>
+      <div class="hero-actions">
+        <a href="/auth/register" class="btn btn-primary">Criar Conta Grátis</a>
+        <a href="/recipes" class="btn btn-ghost">Ver Receitas</a>
+      </div>
+    <% } else { %>
+      <div class="hero-actions">
+        <a href="/recipes/new" class="btn btn-primary">+ Nova Receita</a>
+        <a href="/recipes" class="btn btn-ghost">Explorar</a>
+      </div>
+    <% } %>
+  </div>
+  <div class="hero-visual">
+    <div class="fork-diagram">
+      <div class="fork-node fork-node--origin">
+        <span class="fork-icon">📝</span>
+        <span>Receita Original</span>
+      </div>
+      <div class="fork-branches">
+        <div class="fork-line"></div>
+        <div class="fork-line"></div>
+      </div>
+      <div class="fork-children">
+        <div class="fork-node fork-node--fork">
+          <span class="fork-icon">🍴</span>
+          <span>Fork A</span>
+        </div>
+        <div class="fork-node fork-node--fork">
+          <span class="fork-icon">🍴</span>
+          <span>Fork B</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <h2>Receitas Recentes</h2>
+    <a href="/recipes" class="link-muted">Ver todas →</a>
+  </div>
+
+  <% if (recipes.length === 0) { %>
+    <div class="empty-state">
+      <div class="empty-icon">🍽️</div>
+      <h3>Nenhuma receita ainda</h3>
+      <p>Seja o primeiro a publicar uma receita!</p>
+      <% if (currentUser) { %>
+        <a href="/recipes/new" class="btn btn-primary">Criar Receita</a>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="recipe-grid">
+      <% recipes.forEach(recipe => { %>
+        <article class="recipe-card">
+          <% if (recipe.forkedFromId) { %>
+            <div class="fork-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="8" cy="5" r="2"/><circle cx="16" cy="5" r="2"/><circle cx="8" cy="19" r="2"/>
+                <path d="M8 7v10M16 7v4M16 11c-4 0-6 2-6 4v4" stroke-linecap="round"/>
+              </svg>
+              Fork
+            </div>
+          <% } %>
+          <div class="recipe-card-body">
+            <span class="category-badge"><%= recipe.category %></span>
+            <h3 class="recipe-card-title">
+              <a href="/recipes/<%= recipe.id %>"><%= recipe.title %></a>
+            </h3>
+            <p class="recipe-card-desc">
+              <%= recipe.description.substring(0, 100) %>
+              <%= recipe.description.length > 100 ? '...' : '' %>
+            </p>
+          </div>
+          <div class="recipe-card-footer">
+            <span class="recipe-meta">👤 <%= recipe.author.name %></span>
+            <div class="recipe-stats">
+              <span title="Forks">🍴 <%= recipe.forks.length %></span>
+              <span title="Favoritos">⭐ <%= recipe.favoritedBy.length %></span>
+              <span title="Tempo">⏱ <%= recipe.prepTime %>min</span>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<section class="features-strip">
+  <div class="feature-item">
+    <span class="feature-icon">🍴</span>
+    <h3>Forke Receitas</h3>
+    <p>Derive qualquer receita e publique sua versão única.</p>
+  </div>
+  <div class="feature-item">
+    <span class="feature-icon">⭐</span>
+    <h3>Favoritos</h3>
+    <p>Salve as receitas que você ama para acessar depois.</p>
+  </div>
+  <div class="feature-item">
+    <span class="feature-icon">🌳</span>
+    <h3>Linhagem Visual</h3>
+    <p>Veja de onde uma receita vem e para onde ela vai.</p>
+  </div>
+</section>

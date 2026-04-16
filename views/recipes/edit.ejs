@@ -1,0 +1,102 @@
+<div class="form-page">
+  <div class="form-page-header">
+    <a href="/recipes/<%= recipe.id %>" class="back-link">← Voltar para a receita</a>
+    <h1>Editar Receita</h1>
+    <% if (recipe.forkedFromId) { %>
+      <p class="fork-notice">🍴 Esta é uma receita forkada — personalize à vontade!</p>
+    <% } %>
+  </div>
+
+  <form action="/recipes/<%= recipe.id %>?_method=PUT" method="POST" class="recipe-form">
+    <div class="form-grid">
+      <div class="form-group form-group--full">
+        <label for="title">Título da Receita *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value="<%= recipe.title %>"
+          required
+          maxlength="120"
+        />
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="description">Descrição *</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="3"
+          required
+          maxlength="500"
+        ><%= recipe.description %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Categoria</label>
+        <select id="category" name="category">
+          <% ['Geral','Sobremesa','Massa','Carne','Vegetariano','Vegano','Lanche','Bebida','Sopas','Salada'].forEach(cat => { %>
+            <option value="<%= cat %>" <%= recipe.category === cat ? 'selected' : '' %>>
+              <%= cat %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="prepTime">Tempo de Preparo (min)</label>
+        <input
+          type="number"
+          id="prepTime"
+          name="prepTime"
+          value="<%= recipe.prepTime %>"
+          min="1"
+          max="600"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="servings">Porções</label>
+        <input
+          type="number"
+          id="servings"
+          name="servings"
+          value="<%= recipe.servings %>"
+          min="1"
+          max="50"
+          required
+        />
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="ingredients">
+          Ingredientes * <span class="label-hint">(um por linha)</span>
+        </label>
+        <textarea
+          id="ingredients"
+          name="ingredients"
+          rows="8"
+          required
+        ><%= recipe.ingredients %></textarea>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="instructions">
+          Modo de Preparo * <span class="label-hint">(um passo por linha)</span>
+        </label>
+        <textarea
+          id="instructions"
+          name="instructions"
+          rows="8"
+          required
+        ><%= recipe.instructions %></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="/recipes/<%= recipe.id %>" class="btn btn-ghost">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Salvar Alterações ✅</button>
+    </div>
+  </form>
+</div>

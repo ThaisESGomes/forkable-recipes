@@ -1,0 +1,16 @@
+<% if (success && success.length > 0) { %>
+  <% success.forEach(msg => { %>
+    <div class="alert alert--success" role="alert">
+      <span>✅ <%= msg %></span>
+      <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+    </div>
+  <% }) %>
+<% } %>
+<% if (error && error.length > 0) { %>
+  <% error.forEach(msg => { %>
+    <div class="alert alert--error" role="alert">
+      <span>⚠️ <%= msg %></span>
+      <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+    </div>
+  <% }) %>
+<% } %>

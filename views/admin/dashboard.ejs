@@ -1,0 +1,135 @@
+<div class="admin-layout">
+  <div class="page-header">
+    <h1>⚙️ Painel Administrativo</h1>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number"><%= stats.totalUsers %></span>
+      <span class="stat-label">Usuários</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number"><%= stats.totalRecipes %></span>
+      <span class="stat-label">Receitas</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number"><%= stats.totalForks %></span>
+      <span class="stat-label">Forks</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number"><%= stats.totalFavs %></span>
+      <span class="stat-label">Favoritos</span>
+    </div>
+  </div>
+
+  <!-- USUÁRIOS -->
+  <section class="admin-section">
+    <h2>👥 Usuários (<%= users.length %>)</h2>
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Receitas</th>
+            <th>Favoritos</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+            <tr>
+              <td><code>#<%= user.id %></code></td>
+              <td><strong><%= user.name %></strong></td>
+              <td><%= user.email %></td>
+              <td>
+                <form action="/admin/users/<%= user.id %>/role?_method=PATCH" method="POST" style="display:inline">
+                  <select
+                    name="role"
+                    onchange="this.form.submit()"
+                    class="role-select"
+                    <%= user.id === currentUser.id ? 'disabled' : '' %>
+                  >
+                    <option value="CHEF"  <%= user.role === 'CHEF'  ? 'selected' : '' %>>Chef</option>
+                    <option value="ADMIN" <%= user.role === 'ADMIN' ? 'selected' : '' %>>Admin</option>
+                  </select>
+                </form>
+              </td>
+              <td><%= user.recipes.length %></td>
+              <td><%= user.favorites.length %></td>
+              <td>
+                <% if (user.id !== currentUser.id) { %>
+                  <form
+                    action="/admin/users/<%= user.id %>?_method=DELETE"
+                    method="POST"
+                    onsubmit="return confirm('Excluir usuário <%= user.name %>? Todas as suas receitas também serão excluídas.')">
+                    <button type="submit" class="btn btn-danger btn-xs">Excluir</button>
+                  </form>
+                <% } else { %>
+                  <span class="text-muted">—</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RECEITAS -->
+  <section class="admin-section">
+    <h2>📝 Receitas (<%= recipes.length %>)</h2>
+    <div class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Categoria</th>
+            <th>Forks</th>
+            <th>Favs</th>
+            <th>Fork de</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recipes.forEach(recipe => { %>
+            <tr>
+              <td><code>#<%= recipe.id %></code></td>
+              <td>
+                <a href="/recipes/<%= recipe.id %>">
+                  <%= recipe.title.substring(0, 40) %>
+                </a>
+              </td>
+              <td><%= recipe.author.name %></td>
+              <td>
+                <span class="category-badge"><%= recipe.category %></span>
+              </td>
+              <td><%= recipe.forks.length %></td>
+              <td><%= recipe.favoritedBy.length %></td>
+              <td>
+                <% if (recipe.forkedFromId) { %>
+                  <a href="/recipes/<%= recipe.forkedFromId %>">#<%= recipe.forkedFromId %></a>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td>
+                <form
+                  action="/admin/recipes/<%= recipe.id %>?_method=DELETE"
+                  method="POST"
+                  onsubmit="return confirm('Excluir receita #<%= recipe.id %>?')">
+                  <button type="submit" class="btn btn-danger btn-xs">Excluir</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

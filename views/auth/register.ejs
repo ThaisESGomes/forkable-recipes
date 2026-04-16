@@ -1,0 +1,75 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" class="auth-logo">
+        <circle cx="8" cy="5" r="2" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="16" cy="5" r="2" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="8" cy="19" r="2" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 7v10M16 7v4M16 11c-4 0-6 2-6 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <h1>Criar sua conta</h1>
+      <p>Junte-se à comunidade de chefs</p>
+    </div>
+
+    <form action="/auth/register" method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="name">Nome completo</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Seu nome"
+          required
+          autocomplete="name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="seu@email.com"
+          required
+          autocomplete="email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="bio">Bio <span class="label-optional">(opcional)</span></label>
+        <input
+          type="text"
+          id="bio"
+          name="bio"
+          placeholder="Conte um pouco sobre você..."
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">
+          Senha <span class="label-optional">(mín. 6 caracteres)</span>
+        </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar senha</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="••••••••"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Criar Conta</button>
+    </form>
+
+    <p class="auth-link">Já tem conta? <a href="/auth/login">Fazer login</a></p>
+  </div>
+</div>

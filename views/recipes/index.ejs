@@ -1,0 +1,77 @@
+<div class="page-header">
+  <h1>Receitas</h1>
+  <% if (currentUser) { %>
+    <a href="/recipes/new" class="btn btn-primary">+ Nova Receita</a>
+  <% } %>
+</div>
+
+<form action="/recipes" method="GET" class="search-form">
+  <div class="search-row">
+    <input
+      type="text"
+      name="search"
+      placeholder="Buscar receitas..."
+      value="<%= search %>"
+      class="search-input"
+    />
+    <select name="category" class="search-select">
+      <option value="">Todas as categorias</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat %>" <%= category === cat ? 'selected' : '' %>>
+          <%= cat %>
+        </option>
+      <% }) %>
+    </select>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    <% if (search || category) { %>
+      <a href="/recipes" class="btn btn-ghost">Limpar</a>
+    <% } %>
+  </div>
+</form>
+
+<% if (recipes.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <h3>Nenhuma receita encontrada</h3>
+    <p>Tente outros termos ou <a href="/recipes">veja todas as receitas</a>.</p>
+  </div>
+<% } else { %>
+  <p class="results-count">
+    <strong><%= recipes.length %></strong>
+    receita<%= recipes.length !== 1 ? 's' : '' %>
+    encontrada<%= recipes.length !== 1 ? 's' : '' %>
+  </p>
+  <div class="recipe-grid">
+    <% recipes.forEach(recipe => { %>
+      <article class="recipe-card">
+        <% if (recipe.forkedFromId) { %>
+          <div class="fork-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="8" cy="5" r="2"/><circle cx="16" cy="5" r="2"/><circle cx="8" cy="19" r="2"/>
+              <path d="M8 7v10M16 7v4M16 11c-4 0-6 2-6 4v4" stroke-linecap="round"/>
+            </svg>
+            Fork de <%= recipe.forkedFrom ? recipe.forkedFrom.author.name : 'receita deletada' %>
+          </div>
+        <% } %>
+        <div class="recipe-card-body">
+          <span class="category-badge"><%= recipe.category %></span>
+          <h3 class="recipe-card-title">
+            <a href="/recipes/<%= recipe.id %>"><%= recipe.title %></a>
+          </h3>
+          <p class="recipe-card-desc">
+            <%= recipe.description.substring(0, 110) %>
+            <%= recipe.description.length > 110 ? '...' : '' %>
+          </p>
+        </div>
+        <div class="recipe-card-footer">
+          <span class="recipe-meta">👤 <%= recipe.author.name %></span>
+          <div class="recipe-stats">
+            <span>🍴 <%= recipe.forks.length %></span>
+            <span>⭐ <%= recipe.favoritedBy.length %></span>
+            <span>⏱ <%= recipe.prepTime %>min</span>
+          </div>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+<% } %>

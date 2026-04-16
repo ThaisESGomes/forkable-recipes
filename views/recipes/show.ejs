@@ -1,0 +1,140 @@
+<!-- LINHAGEM / LINEAGE -->
+<% if (lineage.length > 0 || recipe.forkedFromId) { %>
+  <div class="lineage-banner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="8" cy="5" r="2"/><circle cx="16" cy="5" r="2"/><circle cx="8" cy="19" r="2"/>
+      <path d="M8 7v10M16 7v4M16 11c-4 0-6 2-6 4v4" stroke-linecap="round"/>
+    </svg>
+    <span>Linhagem: </span>
+    <% lineage.forEach((r, i) => { %>
+      <a href="/recipes/<%= r.id %>" class="lineage-link"><%= r.title %></a>
+      <span class="lineage-author">por <%= r.author.name %></span>
+      <span class="lineage-arrow">→</span>
+    <% }) %>
+    <% if (recipe.forkedFrom) { %>
+      <a href="/recipes/<%= recipe.forkedFrom.id %>" class="lineage-link">
+        <%= recipe.forkedFrom.title %>
+      </a>
+      <span class="lineage-author">por <%= recipe.forkedFrom.author.name %></span>
+      <span class="lineage-arrow">→</span>
+    <% } %>
+    <strong><%= recipe.title %></strong>
+    <span class="lineage-author">(esta versão)</span>
+  </div>
+<% } %>
+
+<div class="recipe-detail-layout">
+  <!-- COLUNA PRINCIPAL -->
+  <div class="recipe-main">
+    <div class="recipe-detail-header">
+      <div>
+        <span class="category-badge category-badge--lg"><%= recipe.category %></span>
+        <h1 class="recipe-detail-title"><%= recipe.title %></h1>
+        <p class="recipe-detail-desc"><%= recipe.description %></p>
+      </div>
+      <% if (currentUser && (currentUser.id === recipe.authorId || currentUser.role === 'ADMIN')) { %>
+        <div class="recipe-actions-owner">
+          <a href="/recipes/<%= recipe.id %>/edit" class="btn btn-ghost btn-sm">✏️ Editar</a>
+          <form action="/recipes/<%= recipe.id %>?_method=DELETE" method="POST"
+                onsubmit="return confirm('Tem certeza? Forks desta receita serão desvinculados.')">
+            <button type="submit" class="btn btn-danger btn-sm">🗑 Excluir</button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="recipe-meta-bar">
+      <span>👤 <strong><%= recipe.author.name %></strong></span>
+      <span>⏱ <%= recipe.prepTime %> min</span>
+      <span>🍽️ <%= recipe.servings %> porções</span>
+      <span>🍴 <%= recipe.forks.length %> fork<%= recipe.forks.length !== 1 ? 's' : '' %></span>
+      <span>⭐ <%= recipe.favoritedBy.length %> favorito<%= recipe.favoritedBy.length !== 1 ? 's' : '' %></span>
+      <span class="recipe-date">
+        📅 <%= new Date(recipe.createdAt).toLocaleDateString('pt-BR') %>
+      </span>
+    </div>
+
+    <!-- AÇÕES DO USUÁRIO -->
+    <% if (currentUser && currentUser.id !== recipe.authorId) { %>
+      <div class="recipe-user-actions">
+        <form action="/recipes/<%= recipe.id %>/favorite" method="POST" style="display:inline">
+          <button type="submit" class="btn <%= isFavorited ? 'btn-warning' : 'btn-ghost' %>">
+            <%= isFavorited ? '⭐ Desfavoritar' : '☆ Favoritar' %>
+          </button>
+        </form>
+        <form action="/recipes/<%= recipe.id %>/fork" method="POST" style="display:inline">
+          <button type="submit" class="btn btn-primary">
+            🍴 Forkar esta Receita
+          </button>
+        </form>
+      </div>
+    <% } else if (currentUser && currentUser.id === recipe.authorId) { %>
+      <div class="recipe-user-actions">
+        <span class="own-recipe-label">📝 Esta é sua receita</span>
+      </div>
+    <% } else { %>
+      <div class="recipe-user-actions">
+        <a href="/auth/login" class="btn btn-ghost">
+          Faça login para favoritar ou forkar
+        </a>
+      </div>
+    <% } %>
+
+    <!-- INGREDIENTES -->
+    <section class="recipe-section">
+      <h2>🥗 Ingredientes</h2>
+      <ul class="ingredients-list">
+        <% recipe.ingredients.split('\n').filter(i => i.trim()).forEach(ingredient => { %>
+          <li><%= ingredient.trim() %></li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <!-- MODO DE PREPARO -->
+    <section class="recipe-section">
+      <h2>👨‍🍳 Modo de Preparo</h2>
+      <ol class="instructions-list">
+        <% recipe.instructions.split('\n').filter(i => i.trim()).forEach(step => { %>
+          <li><%= step.replace(/^\d+\.\s*/, '').trim() %></li>
+        <% }) %>
+      </ol>
+    </section>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="recipe-sidebar">
+    <!-- FORKS -->
+    <div class="sidebar-card">
+      <h3>🍴 Forks desta Receita (<%= recipe.forks.length %>)</h3>
+      <% if (recipe.forks.length === 0) { %>
+        <p class="sidebar-empty">Nenhum fork ainda. Seja o primeiro!</p>
+      <% } else { %>
+        <ul class="fork-list">
+          <% recipe.forks.forEach(fork => { %>
+            <li class="fork-list-item">
+              <a href="/recipes/<%= fork.id %>" class="fork-list-link">
+                <strong><%= fork.title %></strong>
+                <span class="fork-list-author">por <%= fork.author.name %></span>
+              </a>
+              <div class="fork-list-stats">
+                <span>🍴 <%= fork.forks.length %></span>
+                <span>⭐ <%= fork.favoritedBy.length %></span>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+
+    <!-- ORIGEM -->
+    <% if (recipe.forkedFrom) { %>
+      <div class="sidebar-card sidebar-card--origin">
+        <h3>📌 Forkado de</h3>
+        <a href="/recipes/<%= recipe.forkedFrom.id %>" class="fork-origin-link">
+          <strong><%= recipe.forkedFrom.title %></strong>
+          <span>por <%= recipe.forkedFrom.author.name %></span>
+        </a>
+      </div>
+    <% } %>
+  </aside>
+</div>

@@ -1,0 +1,107 @@
+<div class="form-page">
+  <div class="form-page-header">
+    <a href="/recipes" class="back-link">← Voltar</a>
+    <h1>Nova Receita</h1>
+  </div>
+
+  <form action="/recipes" method="POST" class="recipe-form">
+    <div class="form-grid">
+      <div class="form-group form-group--full">
+        <label for="title">Título da Receita *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="Ex: Bolo de Cenoura da Vovó"
+          required
+          maxlength="120"
+        />
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="description">Descrição *</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="3"
+          placeholder="Descreva brevemente a receita..."
+          required
+          maxlength="500"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Categoria</label>
+        <select id="category" name="category">
+          <option value="Geral">Geral</option>
+          <option value="Sobremesa">Sobremesa</option>
+          <option value="Massa">Massa</option>
+          <option value="Carne">Carne</option>
+          <option value="Vegetariano">Vegetariano</option>
+          <option value="Vegano">Vegano</option>
+          <option value="Lanche">Lanche</option>
+          <option value="Bebida">Bebida</option>
+          <option value="Sopas">Sopas</option>
+          <option value="Salada">Salada</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="prepTime">Tempo de Preparo (min) *</label>
+        <input
+          type="number"
+          id="prepTime"
+          name="prepTime"
+          value="30"
+          min="1"
+          max="600"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="servings">Porções *</label>
+        <input
+          type="number"
+          id="servings"
+          name="servings"
+          value="2"
+          min="1"
+          max="50"
+          required
+        />
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="ingredients">
+          Ingredientes * <span class="label-hint">(um por linha)</span>
+        </label>
+        <textarea
+          id="ingredients"
+          name="ingredients"
+          rows="8"
+          placeholder="2 xícaras de farinha&#10;3 ovos&#10;1 colher de sal"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="instructions">
+          Modo de Preparo * <span class="label-hint">(um passo por linha)</span>
+        </label>
+        <textarea
+          id="instructions"
+          name="instructions"
+          rows="8"
+          placeholder="1. Preaqueça o forno a 180°C&#10;2. Misture os ingredientes secos&#10;3. ..."
+          required
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="/recipes" class="btn btn-ghost">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Publicar Receita 🍴</button>
+    </div>
+  </form>
+</div>
