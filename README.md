@@ -4,7 +4,7 @@ Plataforma social de receitas estilo GitHub, onde usuários podem **forkar** rec
 
 ## 🎥 Vídeo de Demonstração
 
-> **[INSERIR LINK DO YOUTUBE/DRIVE AQUI]**
+> **https://drive.google.com/file/d/11a6ixndFqMdTfuMbKT057H1FoUC5bz0-/view?usp=sharing**
 
 ## 🚀 Como Rodar
 
