@@ -19,6 +19,7 @@ router.post('/login', async (req, res) => {
       req.flash('error', 'Email ou senha incorretos.');
       return res.redirect('/auth/login');
     }
+    await new Promise((resolve, reject) => req.session.regenerate(err => err ? reject(err) : resolve()));
     req.session.userId    = user.id;
     req.session.userName  = user.name;
     req.session.userEmail = user.email;
@@ -44,7 +45,7 @@ router.post('/register', async (req, res) => {
     req.flash('error', 'As senhas não coincidem.');
     return res.redirect('/auth/register');
   }
-  if (password.length < 6) {
+  if (typeof password !== 'string' || password.length < 6) {
     req.flash('error', 'A senha deve ter pelo menos 6 caracteres.');
     return res.redirect('/auth/register');
   }
@@ -58,6 +59,7 @@ router.post('/register', async (req, res) => {
     const user = await prisma.user.create({
       data: { name, email, password: hashed, bio: bio || null }
     });
+    await new Promise((resolve, reject) => req.session.regenerate(err => err ? reject(err) : resolve()));
     req.session.userId    = user.id;
     req.session.userName  = user.name;
     req.session.userEmail = user.email;

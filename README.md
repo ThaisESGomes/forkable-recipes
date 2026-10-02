@@ -16,7 +16,7 @@ Plataforma social de receitas estilo GitHub, onde usuários podem **forkar** rec
 
 ```bash
 # 1. Clone o repositório
-git clone <url-do-repo>
+git clone https://github.com/ThaisESGomes/forkable-recipes.git
 cd forkable-recipes
 
 # 2. Instale as dependências
@@ -24,6 +24,7 @@ npm install
 
 # 3. Configure o ambiente
 cp .env.example .env
+# Edite .env e configure SESSION_SECRET com pelo menos 32 caracteres
 
 # 4. Crie o banco de dados e rode as migrações
 npx prisma migrate dev --name init
@@ -62,3 +63,20 @@ Acesse: http://localhost:3000
 ## 📦 Release
 
 Tag: `v3.0.0-rec` — Entrega P3 - Recuperação Final
+
+## Segurança e limites
+
+- Senhas armazenadas com bcrypt; sessão regenerada após login/cadastro.
+- `SESSION_SECRET` obrigatória, com pelo menos 32 caracteres; não publique seu `.env`.
+- Cookies `HttpOnly` e `SameSite=Lax`; `Secure` quando `NODE_ENV=production`, exigindo HTTPS.
+- Configure `TRUST_PROXY=1` somente atrás de um proxy confiável.
+- Contas da tabela acima são exclusivamente dados fictícios do seed local.
+- O armazenamento padrão de sessões é em memória. Para produção, faltam um store persistente, proteção CSRF explícita, limites de tentativas e revisão completa das permissões.
+
+## Testes
+
+```bash
+npm test
+```
+
+Os testes verificam a configuração de sessão e as fronteiras de permissão dos middlewares; não substituem testes completos com banco e navegador.

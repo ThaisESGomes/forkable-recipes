@@ -26,12 +26,9 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 60 * 24 }
-}));
+const sessionConfig = require('./session-config');
+if (process.env.TRUST_PROXY === '1') app.set('trust proxy', 1);
+app.use(session(sessionConfig()));
 
 
 app.use(flash());
